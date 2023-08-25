@@ -1,8 +1,8 @@
+'use client'
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+
 import { UserButton } from "@clerk/nextjs";
-import MobileSidebar from "./mobile-sidebar";
+import MobileSidebar from "@/components/mobile-sidebar";
 
 const Navbar = () => {
   return (

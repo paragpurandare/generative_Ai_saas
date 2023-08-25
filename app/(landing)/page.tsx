@@ -1,5 +1,6 @@
+'use client'
 import { Button } from "@/components/ui/button";
-import { Link, Link2, Linkedin, LogIn } from "lucide-react";
+import {LogIn } from "lucide-react";
 
 const LandingPage = () => {
   return (

@@ -1,10 +1,18 @@
-"use client"
-
+"use client";
+import React from "react";
 import { cn } from "@/lib/utils";
-import { Code, ImageIcon, LayoutDashboard, Link, MessageSquare, Music, Settings, Video, VideoIcon } from "lucide-react";
+import {
+  Code,
+  ImageIcon,
+  LayoutDashboard,
+  MessageSquare,
+  Music,
+  Settings,
+  VideoIcon,
+} from "lucide-react";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
-import React from "react";
+import { usePathname } from "next/navigation";
 
 const routes = [
   {
@@ -43,7 +51,6 @@ const routes = [
     href: "/code",
     color: "text-green-700",
   },
-
   {
     label: "Settings",
     icon: Settings,
@@ -51,29 +58,39 @@ const routes = [
     color: "text-white-600",
   },
 ];
+
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
+
 const SideBar = () => {
+  const pathname = usePathname();
   return (
     <div className="flex flex-col h-full space-y-4 py-4 bg-[#111827] text-white">
       <div className="px-3 py-2 flex-1">
-        <Link href="/dashboard" className="flex items-center pl-3 mb-14">
+        <a href="/dashboard" className="flex items-center pl-3 mb-14">
           <div className="relative w-8 h-8 mr-4">
             <Image fill alt="Logo" src="/logo.png" />
           </div>
           <h1 className={cn("text-2xl font-bold", montserrat.className)}>
             Sharp
           </h1>
-        </Link>
+        </a>
         <div className="space-y-1 ">
-          {routes.map((route)=>(
-            <Link href={route.href} key={route.href}
-            className="text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition"
+          {routes.map((route) => (
+            <a
+              href={route.href}
+              key={route.href}
+              className={cn(
+                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-white hover:bg-white/10 rounded-lg transition",
+                pathname === route.href
+                  ? "text-white bg-white/10"
+                  : "text-zinc-400"
+              )}
             >
-                <div className="flex items-center flex-1">
-                  <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-                  {route.label}
-                </div>
-            </Link>
+              <div className="flex items-center flex-1">
+                <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
+                {route.label}
+              </div>
+            </a>
           ))}
         </div>
       </div>
