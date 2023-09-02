@@ -15,25 +15,40 @@ export async function POST(req: Request) {
     }
 
     const { body } = await req.json();
-    const { messages } = body;
+    const { prompt, amount = 1, resolution = "512x512" } = body;
 
-    if (!messages) {
-      return new NextResponse(JSON.stringify({ error: "Messages are required" }), { status: 400 });
+    if (!prompt) {
+      return new NextResponse(JSON.stringify({ error: "Prompt is required" }), { status: 400 });
+    }
+
+    if (!amount) {
+      return new NextResponse(JSON.stringify({ error: "Amount is required" }), { status: 400 });
+    }
+
+    if (!resolution) {
+      return new NextResponse(JSON.stringify({ error: "Resolution is required" }), { status: 400 });
     }
 
     if (!openai.apiKey) {
       return new NextResponse(JSON.stringify({ error: "OpenAI API key not configured" }), { status: 500 });
     }
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages
+    const response = await openai.images.generate({
+      prompt,
+      n: parseInt(amount, 10),
+      size: resolution,
     });
+    // Access the image data from the response
+    if (response.data && response.data[0] && response.data[0].url) {
+      const imageData = response.data[0].url;
+      return new NextResponse(JSON.stringify({ imageUrl: imageData }), { status: 200 });
+    } else {
+      return new NextResponse(JSON.stringify({ error: "Image data not found in the response" }), { status: 500 });
+    }
 
-    return new NextResponse(JSON.stringify(response.choices[0].message), { status: 200 });
 
   } catch (error) {
-    console.error("[CONVERSATION_ERROR]", error); // Use console.error for errors
+    console.error("[IMAGE_ERROR]", error); // Use console.error for errors
     return new NextResponse(JSON.stringify({ error: "Internal error" }), { status: 500 });
   }
 }
