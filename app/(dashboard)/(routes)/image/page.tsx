@@ -14,8 +14,7 @@ import { useRouter } from "next/navigation";
 import { Empty } from "@/components/empty";
 import Loader from "@/components/Loader";
 import { cn } from "@/lib/utils";
-import UserAvatar from "@/components/user-avatar";
-import BotAvatar from "@/components/bot-avatar";
+
 import {
   Select,
   SelectContent,
