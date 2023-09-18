@@ -8,6 +8,8 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Dork-Ai',
   description: 'Saas Ai Tool',
+  title: 'DoRK-Ai',
+  description: 'AI Platform',
 }
 
 export default function RootLayout({
