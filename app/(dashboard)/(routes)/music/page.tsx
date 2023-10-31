@@ -11,12 +11,10 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { ChatCompletionMessage } from "openai/resources/chat/index.mjs";
 import { Empty } from "@/components/empty";
 import Loader from "@/components/Loader";
 
-
-const   MusicPage = () => {
+const MusicPage = () => {
   const router = useRouter();
   const [music, setMusic] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -27,13 +25,14 @@ const   MusicPage = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
+
   const onSumbit = async (values: z.infer<typeof formSchema>) => {
     try {
       setMusic(undefined);
 
-      const response = await axios.post("/api/Music", values);
-       
-      setMusic(response.data.audio)
+      const response = await axios.post("/api/music", values);
+
+      setMusic(response.data.audio);
       form.reset();
     } catch (error: any) {
       //open pro model subscription
@@ -49,7 +48,7 @@ const   MusicPage = () => {
         title="Music Generation"
         description="Turn your prompt into music. "
         icon={Music}
-        iconColor="text-emerald-500"
+        iconColor="text-orange-500"
         bgColor="bg-emerald-500/10"
       />
       <div className="px-4 lg:px-8">
@@ -89,15 +88,15 @@ const   MusicPage = () => {
               <Loader />
             </div>
           )}
-          {!music && !isLoading && (
-              <Empty label={"No music generated."} />
+          {!music && !isLoading && <Empty label="No music generated." />}
+          {music && (
+            <audio controls className="w-full mt-8">
+              <source src={music} />
+            </audio>
           )}
-          
-              Music will be generated here
-          </div>
         </div>
       </div>
-    
+    </div>
   );
 };
 

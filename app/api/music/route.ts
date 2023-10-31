@@ -1,39 +1,37 @@
-import OpenAI from 'openai';
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { Request } from "openai/_shims/fetch";
+import Replicate from "replicate";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY // This is also the default, can be omitted
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN!
 });
 
 export async function POST(req: Request) {
   try {
     const { userId } = auth();
+    const body = await req.json();
+    const { prompt } = body;
     if (!userId) {
       return new NextResponse(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
 
-    const { body } = await req.json();
-    const { messages } = body;
-
-    if (!messages) {
-      return new NextResponse(JSON.stringify({ error: "Messages are required" }), { status: 400 });
+    if (!prompt) {
+      return new NextResponse(JSON.stringify({ error: "prompt is required" }), { status: 400 });
     }
 
-    if (!openai.apiKey) {
-      return new NextResponse(JSON.stringify({ error: "OpenAI API key not configured" }), { status: 500 });
-    }
+    const response = await replicate.run(
+      "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
+      {
+        input: {
+          prompt_a: prompt
+        }
+      }
+    );
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages
-    });
-
-    return new NextResponse(JSON.stringify(response.choices[0].message), { status: 200 });
+    return NextResponse.json(response);
 
   } catch (error) {
-    console.error("[CONVERSATION_ERROR]", error); // Use console.error for errors
+    console.error("[MUSIC_ERROR]", error); // Use console.error for errors
     return new NextResponse(JSON.stringify({ error: "Internal error" }), { status: 500 });
   }
 }
