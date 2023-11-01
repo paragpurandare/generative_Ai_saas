@@ -1,4 +1,6 @@
-<img  alt="hero_image" src='/hero.png'/>
+# Dork AI - Your All-in-One Creative Hub
+
+![Hero Image](/hero.png)
 
 This is a repository for Build a SaaS AI Platform with Next.js 13, React, Tailwind, Prisma, Stripe [`create-next-app`]().
 
