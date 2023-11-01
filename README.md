@@ -1,4 +1,4 @@
-<img  alt="hero_image" src='/hero.png' height="200px"/>
+<img  alt="hero_image" src='/hero.png'/>
 
 This is a repository for Build a SaaS AI Platform with Next.js 13, React, Tailwind, Prisma, Stripe [`create-next-app`]().
 
