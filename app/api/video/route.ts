@@ -20,10 +20,10 @@ export async function POST(req: Request) {
     }
 
     const response = await replicate.run(
-      "andreasjansson/cantable-diffuguesion:24f3dfb8e9316bf80a541f02db99c12e0d66c1126b8af382ec5471f939093670",
+      "anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351",
       {
         input: {
-          duration: "32"
+          prompt
         }
       }
     );
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     return NextResponse.json(response);
 
   } catch (error) {
-    console.error("[MUSIC_ERROR]", error); // Use console.error for errors
+    console.error("[VIDEO_ERROR]", error); // Use console.error for errors
     return new NextResponse(JSON.stringify({ error: "Internal error" }), { status: 500 });
   }
 }
