@@ -1,18 +1,14 @@
-'use client'
-import { Button } from "@/components/ui/button";
-import {LogIn } from "lucide-react";
+import React from "react";
+import LandingNavbar  from "@/components/LandingNavbar";
+import LandingHero from "@/components/LandingHero";
+import LandingContent from "@/components/LandingContent";
 
 const LandingPage = () => {
   return (
-    <div>
-      <div>Landing Page (Unprotected)</div>
-      <LogIn></LogIn>
-      <a href="/sign-in">
-        <Button>Login</Button>
-      </a>
-      <a href="/sign-up">
-        <Button>Register</Button>
-      </a>
+    <div className="h-full">
+      <LandingNavbar />
+      <LandingHero />
+      <LandingContent/>
     </div>
   );
 };
