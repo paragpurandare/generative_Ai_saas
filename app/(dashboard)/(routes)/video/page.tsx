@@ -15,6 +15,7 @@ import { Empty } from "@/components/empty";
 import Loader from "@/components/Loader";
 
 const VideoPage = () => {
+      
   const router = useRouter();
   const [video, setVideo] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -29,7 +30,7 @@ const VideoPage = () => {
   const onSumbit = async (values: z.infer<typeof formSchema>) => {
     try {
       setVideo(undefined);
-
+      
       const response = await axios.post("/api/video", values);
 
       setVideo(response.data[0]);

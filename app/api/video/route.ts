@@ -11,6 +11,7 @@ export async function POST(req: Request) {
     const { userId } = auth();
     const body = await req.json();
     const { prompt } = body;
+    
     if (!userId) {
       return new NextResponse(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
@@ -33,5 +34,6 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[VIDEO_ERROR]", error); // Use console.error for errors
     return new NextResponse(JSON.stringify({ error: "Internal error" }), { status: 500 });
+
   }
 }

@@ -6,7 +6,7 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!
 });
 
-export async function POST(req: Request) {
+export async function POST(req: Request, res: Response) {
   try {
     const { userId } = auth();
     const body = await req.json();
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         }
       }
     );
-
+    
     return NextResponse.json(response);
 
   } catch (error) {

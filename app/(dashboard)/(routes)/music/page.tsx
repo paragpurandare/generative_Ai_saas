@@ -94,6 +94,7 @@ const MusicPage = () => {
               <source src={music} />
             </audio>
           )}
+          </div>
         </div>
       </div>
     </div>
