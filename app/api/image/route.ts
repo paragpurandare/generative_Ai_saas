@@ -1,13 +1,13 @@
-import OpenAI from 'openai';
+"use client"
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { Request } from "openai/_shims/fetch";
+import Replicate from "replicate";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY // This is also the default, can be omitted
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN!,
 });
 
-export async function POST(req: Request) {
+export async function POST(req:Request) {
   try {
     const { userId } = auth();
     if (!userId) {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     const { body } = await req.json();
-    const { prompt, amount = 1, resolution = "512x512" } = body;
+    const { prompt, amount = "1", resolution = "512x512" } = body; // Ensure 'amount' is a string
 
     if (!prompt) {
       return new NextResponse(JSON.stringify({ error: "Prompt is required" }), { status: 400 });
@@ -29,26 +29,25 @@ export async function POST(req: Request) {
       return new NextResponse(JSON.stringify({ error: "Resolution is required" }), { status: 400 });
     }
 
-    if (!openai.apiKey) {
-      return new NextResponse(JSON.stringify({ error: "OpenAI API key not configured" }), { status: 500 });
-    }
+    const response = await replicate.run(
+      "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4",
+      {
+        input: {
+          prompt,
+          amount: parseInt(amount, 4),
+          resolution,
+        },
+      }
+    );
 
-    const response = await openai.images.generate({
-      prompt,
-      n: parseInt(amount, 10),
-      size: resolution,
-    });
-    // Access the image data from the response
-    if (response.data && response.data[0] && response.data[0].url) {
-      const imageData = response.data[0].url;
-      return new NextResponse(JSON.stringify({ imageUrl: imageData }), { status: 200 });
+    // Check if response contains the image URLs directly
+    if (Array.isArray(response)) {
+      return new NextResponse(JSON.stringify({ imageUrls: response }), { status: 200 });
     } else {
       return new NextResponse(JSON.stringify({ error: "Image data not found in the response" }), { status: 500 });
     }
-
-
   } catch (error) {
-    console.error("[IMAGE_ERROR]", error); // Use console.error for errors
+    console.error("[IMAGE_ERROR]", error);
     return new NextResponse(JSON.stringify({ error: "Internal error" }), { status: 500 });
   }
 }

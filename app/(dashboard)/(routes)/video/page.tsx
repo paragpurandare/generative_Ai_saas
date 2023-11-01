@@ -2,7 +2,7 @@
 import axios from "axios";
 import * as z from "zod";
 import Heading from "@/components/heading";
-import { Music, Video, VideoIcon } from "lucide-react";
+import { Music, VideoIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +11,11 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
 import { Empty } from "@/components/empty";
 import Loader from "@/components/Loader";
 
-
-const   VideoPage = () => {
+const VideoPage = () => {
+      
   const router = useRouter();
   const [video, setVideo] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -27,13 +26,14 @@ const   VideoPage = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
+
   const onSumbit = async (values: z.infer<typeof formSchema>) => {
     try {
       setVideo(undefined);
+      
+      const response = await axios.post("/api/video", values);
 
-      const response = await axios.post("/api/Video", values);
-       
-      setVideo(response.data[0])
+      setVideo(response.data[0]);
       form.reset();
     } catch (error: any) {
       //open pro model subscription
@@ -49,8 +49,8 @@ const   VideoPage = () => {
         title="Video Generation"
         description="Turn your prompt into video. "
         icon={VideoIcon}
-        iconColor="text-orange-700"
-        bgColor="bg-orange-700/10"
+        iconColor="text-red-700"
+        bgColor="bg-red-700/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -67,7 +67,7 @@ const   VideoPage = () => {
                       <Input
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
-                        placeholder="A LED bulb containing water and fishes are floating inside video"
+                        placeholder="Clown fish swimming around a coral reef"
                         {...field}
                       />
                     </FormControl>
@@ -89,18 +89,15 @@ const   VideoPage = () => {
               <Loader />
             </div>
           )}
-          {!Video && !isLoading && (
-              <Empty label={"No Video generated."} />
-          )}
+          {!video && !isLoading && <Empty label="No video is generated." />}
           {video && (
-            <video className="w-full aspect-video mt-8 rounded-lg border bg-black" controls>
-              <source src= {video} />
+            <video controls className="w-full aspect-video mt-8 rounded-lg border-lg bg-back">
+              <source src={video} />
             </video>
           )}
-          </div>
         </div>
       </div>
-    
+    </div>
   );
 };
 

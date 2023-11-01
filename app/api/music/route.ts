@@ -11,13 +11,12 @@ export async function POST(req: Request, res: Response) {
     const { userId } = auth();
     const body = await req.json();
     const { prompt } = body;
-
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
 
-    if (!prompt) { // Fixed logical issue with if condition
-      return new NextResponse("prompt is required", { status: 400 });
+    if (!prompt) {
+      return new NextResponse(JSON.stringify({ error: "prompt is required" }), { status: 400 });
     }
 
     const response = await replicate.run(
@@ -28,11 +27,11 @@ export async function POST(req: Request, res: Response) {
         }
       }
     );
-
-    return  NextResponse.json(response);
+    
+    return NextResponse.json(response);
 
   } catch (error) {
     console.error("[MUSIC_ERROR]", error); // Use console.error for errors
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse(JSON.stringify({ error: "Internal error" }), { status: 500 });
   }
 }
