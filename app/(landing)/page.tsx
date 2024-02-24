@@ -1,5 +1,5 @@
 import React from "react";
-import LandingNavbar  from "@/components/LandingNavbar";
+import LandingNavbar from "@/components/LandingNavbar";
 import LandingHero from "@/components/LandingHero";
 import LandingContent from "@/components/LandingContent";
 
@@ -8,7 +8,7 @@ const LandingPage = () => {
     <div className="h-full">
       <LandingNavbar />
       <LandingHero />
-      <LandingContent/>
+      <LandingContent />
     </div>
   );
 };
