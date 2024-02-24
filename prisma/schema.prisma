@@ -3,12 +3,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  engineType = "binary"
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
-  relationMode = "prisma"
+  url = env("DATABASE_URL")
 }
 
 model UserApiLimit {

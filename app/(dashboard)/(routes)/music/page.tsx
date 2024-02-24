@@ -97,7 +97,6 @@ const MusicPage = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
